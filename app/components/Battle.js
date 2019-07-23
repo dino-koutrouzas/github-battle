@@ -1,12 +1,12 @@
-var React = require('react');
-var PropTypes = require('prop-types');
-var Link = require('react-router-dom').Link;
-var PlayerPreview = require('./PlayerPreview');
+const React = require('react');
+const PropTypes = require('prop-types');
+const Link = require('react-router-dom').Link;
+const PlayerPreview = require('./PlayerPreview');
 
 function ResetButton (props) {
   return (
-      <button className="reset"
-    onClick={props.onReset.bind(null, props.id)}>
+    <button className="reset"
+            onClick={() => props.onReset(props.id)}>
       Reset
     </button>
   )
@@ -30,11 +30,8 @@ class PlayerInput extends React.Component {
   }
  
   handleChange (event) {
-    var value = event.target.value;
-    this.setState(() => ({
-        username: value
-      })
-    )
+    let value = event.target.value;
+    this.setState(() => ({ username: value }));
   }
 
   handleSubmit (event) {
@@ -46,24 +43,29 @@ class PlayerInput extends React.Component {
   }
 
   render () {
+    let { username } = this.state
+    let { label } = this.props
+
     return (
-        <form className='column' onSubmit={this.handleSubmit}>
+      <form className='column' onSubmit={this.handleSubmit}>
         <label className='header' htmlFor='username'>
-        {this.props.label}
-      </label>
-        <input id='username'
-      placeholder="GitHub username"
-      type="text"
-      autoComplete="off"
-      value={this.state.username}
-      onChange={this.handleChange} />
+          {label}
+        </label>
+        <input
+          id='username'
+           placeholder="GitHub username"
+           type="text"
+           autoComplete="off"
+           value={username}
+           onChange={this.handleChange}
+        />
         <button
-      className="button"
-      type="submit"
-      disabled={!this.state.username}>
-        Submit
-      </button>
-        </form>
+          className="button"
+          type="submit"
+          disabled={!username}>
+            Submit
+        </button>
+      </form>
     )
   }
 }
@@ -93,29 +95,22 @@ class Battle extends React.Component {
   }
 
   handleSubmit(id, username) {
-    this.setState(() => {
-      var newState = {};
-      newState[id + 'Name'] = username;
-      newState[id + 'Image'] = 'https://github.com/' + username + '.png?size=200';
-      return newState;
-    })
+    this.setState(() => ({
+      [id + 'Name']: username,
+      [id + 'Image']: `https://github.com/${username}.png?size=200`
+    }));
   }
 
   handleReset(id) {
-    this.setState(() => {
-      var newState = {};
-      newState[id + 'Name'] = '';
-      newState[id + 'Image'] = null;
-      return newState;
-    })
+    this.setState(() => ({
+      [id + 'Name']: '',
+      [id + 'Image']: null
+    }));
   }
 
   render() {
-    var match = this.props.match;
-    var playerOneName = this.state.playerOneName;
-    var playerOneImage = this.state.playerOneImage;
-    var playerTwoName = this.state.playerTwoName;
-    var playerTwoImage = this.state.playerTwoImage;
+    let { match } = this.props
+    let { playerOneName, playerOneImage, playerTwoName, playerTwoImage } = this.state
 
     return (
       <div>
@@ -130,10 +125,10 @@ class Battle extends React.Component {
           {playerOneImage !== null &&
             <PlayerPreview
               avatar={playerOneImage}
-           username={playerOneName}
-           >
-           <ResetButton onReset={this.handleReset}
-           id='playerOne' />
+              username={playerOneName}>
+                <ResetButton
+                  onReset={this.handleReset}
+                  id='playerOne' />
             </PlayerPreview>}
 
           {!playerTwoName &&
@@ -146,10 +141,10 @@ class Battle extends React.Component {
           {playerTwoImage !== null &&
             <PlayerPreview
               avatar={playerTwoImage}
-              username={playerTwoName}
-           >
-           <ResetButton onReset={this.handleReset}
-           id='playerTwo' />
+              username={playerTwoName}>
+                <ResetButton
+                  onReset={this.handleReset}
+                  id='playerTwo' />
             </PlayerPreview>}
         </div>
 
@@ -158,7 +153,7 @@ class Battle extends React.Component {
             className='button'
             to={{
               pathname: match.url + '/results',
-              search: '?playerOneName=' + playerOneName + '&playerTwoName=' + playerTwoName
+              search: `?playerOneName=${playerOneName}&playerTwoName=${playerTwoName}`
             }}>
               Battle
           </Link>}
