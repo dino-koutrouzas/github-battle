@@ -63,25 +63,23 @@ class Results extends React.Component {
     api.battle([
       players.playerOneName,
       players.playerTwoName
-    ]).then(function (results) {
-      if (results == null) {
-        this.setState(function () {
-          return {
-            error: 'Ohhh dear...',
-            loading: false,
-          }
-        })
-      }
+    ]).then((results) => {
+      (results == null) ?
 
-      this.setState(function () {
-        return {
-          error: null,
-          winner: results[0],
-          loser: results[1],
-          loading: false
-        }
-      })
-    }.bind(this))
+      this.setState(() => ({
+        error: 'Ohhh dear...',
+        loading: false,
+      }))
+
+        :
+
+      this.setState(() => ({
+        error: null,
+        winner: results[0],
+        loser: results[1],
+        loading: false
+      }))
+    });
   }
 
   render () {
@@ -94,10 +92,10 @@ class Results extends React.Component {
 
     if (error) {
       return(
-        <div>
+          <div>
           <p>{error}</p>
           <Link to="/battle">Rest</Link>
-        </div>
+          </div>
       )
     }
 
@@ -112,7 +110,6 @@ class Results extends React.Component {
       score={loser.score}
       profile={loser.profile} />
         </div>
-
 
     )
   }
