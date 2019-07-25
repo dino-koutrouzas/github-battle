@@ -1,7 +1,7 @@
-const React = require('react');
-const PropTypes = require('prop-types');
-const api = require('../utils/api');
-const Loading = require('./Loading');
+import React from 'react'
+import PropTypes from 'prop-types'
+import { fetchPopularRepos } from '../utils/api'
+import Loading from './Loading'
 
 function RepoGrid ( { repos }) {
   return (
@@ -84,7 +84,7 @@ class Popular extends React.Component {
       selectedLanguage: lang
     }));
 
-    api.fetchPopularRepos(lang)
+    fetchPopularRepos(lang)
       .then(repos => this.setState(() => ({ repos })));
   }
 
@@ -105,4 +105,4 @@ class Popular extends React.Component {
   }
 }
 
-module.exports = Popular;
+export default Popular;
