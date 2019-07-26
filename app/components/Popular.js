@@ -7,9 +7,9 @@ function RepoGrid ( { repos }) {
   return (
     <ul className="popular-list">
       {repos.map(({ name, owner, html_url, stargazers_count }, index) => (
-          <li className='popular-item'
-              key={name}>
-            <div className='popular-rank'>#{index+1}</div>
+        <li className='popular-item'
+            key={name}>
+          <div className='popular-rank'>#{index+1}</div>
             <ul className='space-list-items'>
               <li>
                 <img className='avatar'
@@ -72,14 +72,14 @@ class Popular extends React.Component {
     this.updateLanguage(this.state.selectedLanguage);
   }
 
-  updateLanguage = (lang) => {
+  updateLanguage = async (lang) => {
     this.setState(() => ({
       repos: null,
       selectedLanguage: lang
     }));
 
-    fetchPopularRepos(lang)
-      .then(repos => this.setState(() => ({ repos })));
+    let repos = await fetchPopularRepos(lang)
+    this.setState(() => ({ repos }));
   }
 
   render() {
