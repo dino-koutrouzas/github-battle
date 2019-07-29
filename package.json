@@ -9,7 +9,12 @@
       "@babel/preset-react"
     ],
     "plugins": [
-      ["@babel/plugin-proposal-class-properties", { "loose": true }]
+      [
+        "@babel/plugin-proposal-class-properties",
+        {
+          "loose": true
+        }
+      ]
     ]
   },
   "scripts": {
@@ -23,11 +28,11 @@
   "license": "ISC",
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
-    "axios": "^0.19.0",
     "query-string": "^6.8.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-router-dom": "^5.0.1"
+    "react-router-dom": "^5.0.1",
+    "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.0",
