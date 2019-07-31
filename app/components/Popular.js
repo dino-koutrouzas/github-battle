@@ -31,25 +31,28 @@ RepoGrid.propTypes = {
   repos: PropTypes.array.isRequired
 }
 
-function SelectLanguage ({ selectedLanguage, onSelect }) {
-  let languages = ['All',
-                   'JavaScript',
-                   'Ruby',
-                   'Java',
-                   'CSS',
-                   'Python']
+function LanguagesNav ({ selectedLanguage, onSelect }) {
+  const languages = ['All',
+                     'JavaScript',
+                     'Ruby',
+                     'Java',
+                     'CSS',
+                     'Python']
 
   return (
-    <ul className="languages">
+    <ul className="flex-center">
       {languages.map(lang => {
         return (
           <li
               key={lang}
               onClick={() => onSelect(lang)}
-              style={selectedLanguage === lang ? { color: 'red' } : null}
-              className="language"
+              style={selectedLanguage === lang
+                     ? { color: 'red' }
+                     : null}
            >
-             {lang}
+            <button className="btn-clear nav-link">
+              {lang}
+            </button>
           </li>
         )
       })}
@@ -57,7 +60,7 @@ function SelectLanguage ({ selectedLanguage, onSelect }) {
   )
 }
 
-SelectLanguage.propTyoes = {
+LanguagesNav.propTyoes = {
   selectedLanguage: PropTypes.string.isRequired,
   onSelect: PropTypes.func.isRequired
 }
@@ -65,7 +68,8 @@ SelectLanguage.propTyoes = {
 class Popular extends React.Component {
   state = {
     selectedLanguage: 'All',
-    repos: null
+    repos: {},
+    error: null
   }
 
   componentDidMount () {
@@ -74,26 +78,46 @@ class Popular extends React.Component {
 
   updateLanguage = async (lang) => {
     this.setState(() => ({
-      repos: null,
+      error: null,
       selectedLanguage: lang
     }));
 
-    let repos = await fetchPopularRepos(lang)
-    this.setState(() => ({ repos }));
+    if (!this.state.repos[lang]) {
+      try {
+        const data = await fetchPopularRepos(lang)
+
+        this.setState(({ repos }) => ({
+          repos: {
+            ...repos,
+            [lang]: data
+          },
+          error: null
+        }));
+      } catch(err) {
+        this.setState({error: err.message})
+      }
+    }
+  }
+
+  isLoading = () => {
+    const { selectedLanguage, repos, error } = this.state
+
+    return !repos[selectedLanguage] && error === null
   }
 
   render() {
-    let { selectedLanguage, repos } = this.state
+    const { selectedLanguage, repos, error } = this.state
 
     return (
       <div>
-        <SelectLanguage
+        <LanguagesNav
           selectedLanguage={selectedLanguage}
           onSelect={this.updateLanguage} />
 
-        {!repos
-           ? <Loading />
-           : <RepoGrid repos={repos} />}
+        {this.isLoading() && <Loading />}
+        {error && <p>{error}</p>}
+        {repos[selectedLanguage] &&
+         <RepoGrid repos={repos[selectedLanguage]}/>}
       </div>
     )
   }

@@ -48,15 +48,20 @@ export async function battle (players) {
 }
 
 export async function fetchPopularRepos (language) {
-  let encodedURI = window.encodeURI(
+  const encodedURI = window.encodeURI(
     `https://api.github.com/search/repositories?q=stars:>1+language:${language}&sort=stars&order=desc&type=Repositories`
   );
 
   try {
     let response = await fetch(encodedURI)
     let repos = await response.json()
-    return repos.items
+
+    if (!repos.items) {
+      throw new Error(repos.message)
+    } else {
+      return repos.items
+    }
   } catch(err) {
-    return handleError(err)
+    throw new Error(err)
   }
 }

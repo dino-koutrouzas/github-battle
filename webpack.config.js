@@ -1,5 +1,5 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+var path = require('path')
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: ['@babel/polyfill', 'whatwg-fetch', './app/index.js'],
@@ -22,6 +22,6 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'app/index.html'
-    }),
+    })
   ]
 };
