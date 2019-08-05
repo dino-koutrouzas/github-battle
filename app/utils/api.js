@@ -1,15 +1,33 @@
+function getErrorMessage(message, username) {
+  if (message === 'Not Found') return `${username} doesn't exist!`
+}
+
 async function getProfile (username) {
-  let response  = await fetch(`https://api.github.com/users/${username}`)
-  return response.json()
+  const response  = await fetch(`https://api.github.com/users/${username}`)
+  const profile = await response.json()
+
+  if (profile.message) {
+    throw new Error(getErrorMessage(profile.message, username))
+  } else {
+    return profile
+  }
 }
 
 async function getRepos (username) {
-  let response  = await fetch(`https://api.github.com/users/${username}/repos?per_page=100`);
-  return response.json()
+  const response  = await fetch(`https://api.github.com/users/${username}/repos?per_page=100`);
+  const repos = await response.json()
+
+  if (repos.message) {
+    throw new Error(getErrorMessage(repos.message, username))
+  } else {
+    return repos
+  }
 }
 
 function getStarCount (repos) {
-  return repos.reduce((result, { stargazers_count }) => result + stargazers_count, 0);
+  return repos.reduce((result, { stargazers_count }) => {
+    return result + stargazers_count, 0
+  })
 }
 
 function calculateScore ({ followers }, repos) {
@@ -22,7 +40,7 @@ function handleError (error) {
 }
 
 async function getUserData (player) {
-  let [profile, repos] = await Promise.all([
+  const [profile, repos] = await Promise.all([
     getProfile(player),
     getRepos(player)
   ])
@@ -34,17 +52,12 @@ async function getUserData (player) {
 }
 
 function sortPlayers (players) {
-  return players.sort((a, b) => b.score - a.score);
+  return players.sort((a, b) => b.score - a.score)
 }
 
 export async function battle (players) {
-  try {
-    let results = await Promise.all(players.map(getUserData))
-
-    return sortPlayers(results)
-  } catch(err) {
-    return handleError(err)
-  }
+  const results = await Promise.all(players.map(getUserData))
+  return sortPlayers(results)
 }
 
 export async function fetchPopularRepos (language) {
@@ -52,16 +65,12 @@ export async function fetchPopularRepos (language) {
     `https://api.github.com/search/repositories?q=stars:>1+language:${language}&sort=stars&order=desc&type=Repositories`
   );
 
-  try {
-    let response = await fetch(encodedURI)
-    let repos = await response.json()
+  let response = await fetch(encodedURI)
+  let repos = await response.json()
 
-    if (!repos.items) {
-      throw new Error(repos.message)
-    } else {
-      return repos.items
-    }
-  } catch(err) {
-    throw new Error(err)
+  if (!repos.items) {
+    throw new Error(repos.message)
+  } else {
+    return repos.items
   }
 }

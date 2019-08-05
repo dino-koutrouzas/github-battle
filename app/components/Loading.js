@@ -1,10 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-let styles = {
+const styles = {
   content: {
     textAlign: 'center',
-    fontSize: '35px'
+    fontSize: '35px',
+    position: 'absolute',
+    left: '0',
+    right: '0',
+    marginTop: '20px'
   }
 };
 
@@ -24,13 +28,15 @@ class Loading extends React.Component {
   }
 
   componentDidMount() {
-    let { text, speed } = this.props
-    let stopper = text + '...'
+    const { text, speed } = this.props
+    const stopper = text + '...'
 
     this.interval = window.setInterval(() => {
       this.state.text === stopper
         ? this.setState(() => ({ text: text }))
-        : this.setState((prevState) => ({ text: prevState.text + '.' }))
+        : this.setState((prevState) => ({
+          text: prevState.text + '.'
+        }))
     }, speed)
   }
 
