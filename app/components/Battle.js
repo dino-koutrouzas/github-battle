@@ -102,7 +102,7 @@ function Instructions () {
           <ol className="container-sm grid center-text battle-instructions">
             <li>
               <h3 className="header-sm">
-                Enter two GitHub users
+                Enter two users
               </h3>
               <FaUserFriends
                 className={`bg-${theme}`}
@@ -152,7 +152,7 @@ class Battle extends React.Component {
         <Instructions />
         <div className='players-container'>
           <h1 className="center-text header-lg">Players</h1>
-          <div className="row space-around">
+          <div className="row space-around players-forms">
             {!playerOne
              ? <PlayerInput
                  id='playerOne'

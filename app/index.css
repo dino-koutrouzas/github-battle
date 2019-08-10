@@ -148,7 +148,6 @@ li {
 
 .battle-instructions li {
   flex: 1;
-  min-width: 300px
 }
 
 .battle-instructions svg {
@@ -225,6 +224,10 @@ li {
   margin: 100px 0;
 }
 
+.players-forms {
+  flex-wrap: wrap;
+}
+
 .avatar-small {
   width: 55px;
   height: 55px;
@@ -271,4 +274,11 @@ li {
 .light-btn:disabled {
   background: #292929;
   color: #4a4a4a;
+}
+
+@media all and (max-width: 520px) {
+  .languages-nav {
+    flex-wrap: wrap;
+    height: 70px;
+  }
 }

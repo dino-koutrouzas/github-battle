@@ -78,7 +78,7 @@ function LanguagesNav ({ selectedLanguage, onSelect }) {
                      'Python']
 
   return (
-    <ul className="flex-center">
+    <ul className="flex-center languages-nav">
       {languages.map(lang => {
         return (
           <li
